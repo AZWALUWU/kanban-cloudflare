@@ -5,7 +5,7 @@ pages_build_output_dir = "./dist"
 [[d1_databases]]
 binding = "DB"
 database_name = "kanban-db"
-database_id = "kanban-db-local"
+database_id = "28e30656-b328-49d3-a84b-0fe9d4a1afc1"
 
 [vars]
 JWT_SECRET = "dev-secret-key-kanban-board-change-in-prod"
