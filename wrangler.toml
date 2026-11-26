@@ -1,0 +1,11 @@
+name = "kanban-cloudflare"
+compatibility_date = "2024-09-23"
+pages_build_output_dir = "./dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "kanban-db"
+database_id = "kanban-db-local"
+
+[vars]
+JWT_SECRET = "dev-secret-key-kanban-board-change-in-prod"
