@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react'
 import type { User } from './types'
 import { Auth } from './components/Auth'
 import { KanbanBoard } from './components/KanbanBoard'
+import { Landing } from './components/Landing'
 
 export function App() {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [showAuth, setShowAuth] = useState(false)
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
 
   useEffect(() => {
     async function checkAuth() {
@@ -16,7 +19,6 @@ export function App() {
           setUser(data.user)
         }
       } catch {
-        // Unauthenticated or offline
       } finally {
         setLoading(false)
       }
@@ -42,7 +44,9 @@ export function App() {
   }
 
   if (!user) {
-    return <Auth onAuthSuccess={(u) => setUser(u)} />
+    return showAuth
+      ? <Auth initialMode={authMode} onBack={() => setShowAuth(false)} onAuthSuccess={(u) => setUser(u)} onModeChange={setAuthMode} />
+      : <Landing onOpenApp={() => { setAuthMode('register'); setShowAuth(true) }} />
   }
 
   return <KanbanBoard user={user} onLogout={handleLogout} />

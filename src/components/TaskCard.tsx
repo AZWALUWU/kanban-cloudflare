@@ -1,4 +1,5 @@
 import type { Task } from '../types'
+import ReactMarkdown from 'react-markdown'
 
 interface TaskCardProps {
   task: Task
@@ -79,11 +80,12 @@ export function TaskCard({
         </div>
       </div>
 
-      {task.description && (
-        <p className="mt-2 text-xs text-slate-600 whitespace-pre-wrap leading-relaxed line-clamp-3">
-          {task.description}
-        </p>
-      )}
+      <div className="mt-2 flex flex-wrap gap-2 text-xs font-semibold">
+        <span className={task.priority === 'high' ? 'text-red-800' : task.priority === 'low' ? 'text-slate-700' : 'text-amber-800'}>Prioritas: {task.priority}</span>
+        {task.dueDate && <time dateTime={task.dueDate} className="text-slate-700">Tenggat: {task.dueDate}</time>}
+        {!!task.checklist?.length && <span className="text-slate-700">Checklist: {task.checklist.filter(item => item.completed).length}/{task.checklist.length}</span>}
+      </div>
+      {task.description && <div className="prose prose-sm mt-2 max-w-none text-slate-800 line-clamp-3"><ReactMarkdown>{task.description}</ReactMarkdown></div>}
     </div>
   )
 }

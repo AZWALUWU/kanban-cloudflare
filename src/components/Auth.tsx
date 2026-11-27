@@ -2,11 +2,14 @@ import { useState, type FormEvent } from 'react'
 import type { User } from '../types'
 
 interface AuthProps {
+  initialMode: 'login' | 'register'
+  onBack: () => void
   onAuthSuccess: (user: User) => void
+  onModeChange: (mode: 'login' | 'register') => void
 }
 
-export function Auth({ onAuthSuccess }: AuthProps) {
-  const [isRegister, setIsRegister] = useState(false)
+export function Auth({ initialMode, onBack, onAuthSuccess, onModeChange }: AuthProps) {
+  const [isRegister, setIsRegister] = useState(initialMode === 'register')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -43,9 +46,10 @@ export function Auth({ onAuthSuccess }: AuthProps) {
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+        <button type="button" onClick={onBack} className="mb-5 min-h-11 text-sm font-medium text-blue-800 underline underline-offset-4">Kembali ke TaskFlow</button>
         <header className="mb-6">
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-            {isRegister ? 'Daftar Akun Baru' : 'Masuk ke Kanban Board'}
+            {isRegister ? 'Daftar Akun Baru' : 'Masuk ke TaskFlow'}
           </h1>
           <p className="mt-1 text-sm text-slate-600">
             {isRegister
@@ -94,9 +98,9 @@ export function Auth({ onAuthSuccess }: AuthProps) {
               id="auth-password"
               type="password"
               required
-              minLength={6}
+              minLength={isRegister ? 8 : 1}
               autoComplete={isRegister ? 'new-password' : 'current-password'}
-              placeholder="Minimal 6 karakter"
+              placeholder={isRegister ? 'Minimal 8 karakter' : 'Kata sandi'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-xs focus:border-blue-600 focus:outline-hidden focus:ring-2 focus:ring-blue-600/20 text-sm"
@@ -120,6 +124,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
                 type="button"
                 onClick={() => {
                   setIsRegister(false)
+                  onModeChange('login')
                   setError('')
                 }}
                 className="font-medium text-blue-600 hover:underline min-h-[44px] px-1 inline-flex items-center"
@@ -134,6 +139,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
                 type="button"
                 onClick={() => {
                   setIsRegister(true)
+                  onModeChange('register')
                   setError('')
                 }}
                 className="font-medium text-blue-600 hover:underline min-h-[44px] px-1 inline-flex items-center"
